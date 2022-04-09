@@ -1,14 +1,23 @@
-import { Button, Card, List, Pagination } from 'antd'
+import { useState, useEffect } from 'react'
+import { Button, Card, List } from 'antd'
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Header from '../components/Header/Header'
 import About from '../components/Home/About'
 import HowItWorks from '../components/Home/HowItWorks'
 import Intro from '../components/Home/Intro'
+import { fetchAccountAddress, connectWallet } from '../logics/wallet'
 
 const { Meta } = Card
 
 const Home: NextPage = () => {
+
+  const [account, setAccount] = useState('')
+
+  useEffect(() => {
+    fetchAccountAddress().then(val => setAccount(val))
+  }, [])
+
   return <div>
     <div className='flex flex-col h-screen'>
       <Head>
@@ -17,8 +26,8 @@ const Home: NextPage = () => {
         <meta name="author" content="Tushar Ojha" />
         <meta name="description" content="GiftaMatic is an blockchain based donation platform. It allows people to donate Matic and earn GFT tokens. GFT tokens enables participation in NFTs airdrop and more. Create Donation Campaigns and Donate Matic for the cause." />
       </Head>
-      <Header />
-      <Intro />
+      <Header accountAddress={account} />
+      <Intro address={account} connectWallet={() => { connectWallet().then((val: string) => setAccount(val)) }} />
     </div>
     <HowItWorks />
     <About />
@@ -31,7 +40,7 @@ const Home: NextPage = () => {
         <Button className='w-4/5 drop-shadow-lg ml-2 text-white' size='large' shape='round' type='default'>View All</Button>
       </div>
       <List
-        style={{ marginTop: '20px', marginLeft: 10, marginRight: 10}}
+        style={{ marginTop: '20px', marginLeft: 10, marginRight: 10 }}
         grid={{
           gutter: 10,
           xs: 1,
@@ -45,10 +54,10 @@ const Home: NextPage = () => {
         renderItem={item => (
           <List.Item key={item.description} className=''>
             <Card
-              className='lg:max-w-[350px] xl:max-w-[450px] lg:pr-[150px]'
+              className='lg:max-w-[350px] xl:max-w-[450px] lg:pr-[150px] rounded-xl'
               cover={
                 <img
-                  style={{height: '200px', objectFit: 'cover'}}
+                  style={{ height: '200px', objectFit: 'cover' }}
                   alt="example"
                   src={item.image}
                 />

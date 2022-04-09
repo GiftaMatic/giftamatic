@@ -3,8 +3,12 @@ import React from "react"
 import { Button } from 'antd'
 import { GiftOutlined, TeamOutlined, ArrowRightOutlined } from "@ant-design/icons"
 
+type IntroProps = {
+  address: string
+  connectWallet: Function
+}
 
-const Intro = () => {
+const Intro = ({ address, connectWallet }: IntroProps) => {
   return <div className='flex flex-col h-full justify-center items-center gradientContainer'>
     <h1 className='text-7xl text-white'>GiftaMatic</h1>
     <p className='text-xl text-slate-200 text-center'>Create, Share &amp; Donate Matic on the Blockchain</p>
@@ -18,7 +22,7 @@ const Intro = () => {
       </div>
     </div>
     <div className='flex mt-6'>
-      <Button className='drop-shadow-xl' size='large' shape='round' type='primary'>Connect Wallet</Button>
+      <Button onClick={() => address !== '' ? null : connectWallet()} className='drop-shadow-xl' size='large' shape='round' type='primary'>{address !== '' ? 'Dashboard' : 'Connect Wallet'}</Button>
       <Button onClick={() => {
         window.scrollTo({ top: window.screen.height * 0.9, behavior: 'smooth' })
       }} className='drop-shadow-xl ml-2 text-white' size='large' shape='round' type='default'>How it works?</Button>
