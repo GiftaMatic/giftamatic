@@ -69,7 +69,9 @@ const Header = ({ accountAddress }: HeaderProps) => {
     })
   }
 
-  return <div className="fixed top-0 left-0 right-0 p-4 flex items-center bg-white z-50 shadow-md">
+  const [connected, setConnected] = useState(false)
+
+  return <div className="top-0 left-0 right-0 p-4 flex items-center bg-white shadow-md">
     <h1 className="flex-1 m-0 ml-3 text-2xl font-semibold drop-shadow-xl">GiftaMatic</h1>
     <GiftScore value={accountGFTBalance} />
     <MaticBalance value={accountBalance} />
