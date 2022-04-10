@@ -42,7 +42,7 @@ const Campaign = ({ arr, address }: { arr: any, address: string }) => {
               (arr.length === 0) ? <div className="flex justify-center content-center">
                 <p> You dont have any campaigns! </p>
               </div> :
-                <Details address={address} id={selectedIndex} className={''} showDonate={false} externalLink={arr[selectedIndex].externalLink} name={arr[selectedIndex].title} collectedAmount={arr[selectedIndex].collectedAmount} targetAmount={arr[selectedIndex].targetAmount} description={arr[selectedIndex].description}
+                <Details onDonate={(d: any) => { }} donorAccount={''} address={address} id={selectedIndex} className={''} showDonate={false} externalLink={arr[selectedIndex].externalLink} name={arr[selectedIndex].title} collectedAmount={arr[selectedIndex].collectedAmount} targetAmount={arr[selectedIndex].targetAmount} description={arr[selectedIndex].description}
                   image={arr[selectedIndex].image} />
             }
           </Content>

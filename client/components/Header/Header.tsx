@@ -6,6 +6,7 @@ import { BigNumber, ethers } from 'ethers'
 import { NETWORK, NETWORK_ID } from "../../config"
 import { addMaticNetworkToMetamask, connectWallet, fetchAccountAddress, getMaticBalance, listenToNetworkChange } from "../../logics/wallet"
 import { getGFTBalance } from "../../logics/giftToken"
+import Link from "next/link"
 
 type DataProps = {
   value: BigNumber
@@ -69,10 +70,10 @@ const Header = ({ accountAddress }: HeaderProps) => {
     })
   }
 
-  const [connected, setConnected] = useState(false)
+  // const [connected, setConnected] = useState(false)
 
   return <div className="top-0 left-0 right-0 p-4 flex items-center bg-white shadow-md">
-    <h1 className="flex-1 m-0 ml-3 text-2xl font-semibold drop-shadow-xl">GiftaMatic</h1>
+    <Link href={'/'}><h1 className="flex-1 m-0 ml-3 text-2xl font-semibold drop-shadow-xl">GiftaMatic</h1></Link>
     <GiftScore value={accountGFTBalance} />
     <MaticBalance value={accountBalance} />
     {

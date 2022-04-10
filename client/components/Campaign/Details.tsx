@@ -7,13 +7,13 @@ import { BigNumber, ethers } from 'ethers'
 import { useState } from 'react'
 import { giftMatic } from '../../logics/gift'
 
-const Details = ({ address, id, showDonate, name, description, collectedAmount, targetAmount, image, externalLink, className, donorAccount = '' }: { address: any, id: any, showDonate: any, name: any, description: any, collectedAmount: any, targetAmount: any, image: any, externalLink: any, className: any, donorAccount: any }) => {
+const Details = ({ address, id, showDonate, name, description, collectedAmount, targetAmount, image, externalLink, className, donorAccount = '', onDonate }: { address: any, id: any, showDonate: any, name: any, description: any, collectedAmount: any, targetAmount: any, image: any, externalLink: any, className: any, donorAccount: any, onDonate: Function }) => {
   const collectedAmountNumber = ethers.utils.formatEther(collectedAmount)
   const collectedValue = collectedAmountNumber.split('.')[0] + '.' + collectedAmountNumber.split('.')[1].slice(0, 2)
   const targetAmountNumber = ethers.utils.formatEther(targetAmount)
   const targetAmountValue = targetAmountNumber.split('.')[0] + '.' + targetAmountNumber.split('.')[1].slice(0, 2)
   const progress = parseFloat(collectedAmountNumber) / parseFloat(targetAmountNumber) * 100
-  const [donateAmount, setDonateAmount] = useState(0)
+  const [donateAmount, setDonateAmount] = useState('0')
 
   return (
     <>
@@ -33,15 +33,9 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
           </div>
           {
             showDonate ? <div className='flex flex-row w-[220px] justify-center items-center'>
-              <Input type="number" value={donateAmount} onChange={(e) => setDonateAmount(parseInt(e.target.value))} className='h-[30px] rounded-xl' />
+              <Input type="text" value={donateAmount} onChange={(e) => setDonateAmount(e.target.value)} className='h-[30px] rounded-xl' />
               <Button onClick={() => {
-                giftMatic(address, id, donorAccount, donateAmount).then((v) => {
-                  console.log(v, 'sf')
-                  toast('Thanks for donating.')
-                }).catch(e => {
-                  console.log(e, 'dsfsf')
-                  toast('Unable to send a donation.')
-                })
+                onDonate(donateAmount)
               }} type='primary' shape='round' style={{ display: 'flex' }} className='m-2 w-[100px] flex flex-1 items-center justify-center rounded-xl'>Donate <GiftOutlined /></Button>
             </div> : <div></div>
           }
