@@ -41,7 +41,7 @@ const DashboardPage = () => {
         <h1 className="dashboard-heading flex flex-row m-4 text-3xl font-semibold drop-shadow-xl" >Your Campaigns
           <Button className="flex justify-center items-center ml-4" type="primary" shape="round" size="middle" style={{ height: "36px", width: "180px", display: 'flex', flexDirection: 'row' }} > Create Campaign <PlusCircleOutlined /> </Button>
         </h1>
-        <Campaign arr={campaigns} />
+        <Campaign address={account} arr={campaigns} />
       </div>
 
     </div>

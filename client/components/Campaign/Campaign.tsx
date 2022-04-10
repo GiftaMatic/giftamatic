@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import Details from "../Campaign/Details"
 
 
-const Campaign = ({ arr }: { arr: any }) => {
+const Campaign = ({ arr, address }: { arr: any, address: string }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(0)
   const { Sider, Header, Footer, Content } = Layout;
@@ -42,7 +42,7 @@ const Campaign = ({ arr }: { arr: any }) => {
               (arr.length === 0) ? <div className="flex justify-center content-center">
                 <p> You dont have any campaigns! </p>
               </div> :
-                <Details name={arr[selectedIndex].title} collectedAmount={arr[selectedIndex].collectedAmount} targetAmount={arr[selectedIndex].targetAmount} description={arr[selectedIndex].description}
+                <Details address={address} id={selectedIndex} className={''} showDonate={false} externalLink={arr[selectedIndex].externalLink} name={arr[selectedIndex].title} collectedAmount={arr[selectedIndex].collectedAmount} targetAmount={arr[selectedIndex].targetAmount} description={arr[selectedIndex].description}
                   image={arr[selectedIndex].image} />
             }
           </Content>
