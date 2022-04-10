@@ -4,7 +4,7 @@ pragma solidity ^0.8.11;
 import "./GiftToken.sol";
 
 contract Gift {
-    
+
     struct Campaign {
         string cId;
         uint256 targetAmount;
@@ -33,13 +33,9 @@ contract Gift {
         require(_targetAmount > 0, "Target amount should be greater than 0");
 
         Campaign memory newCampaign = Campaign(
-            // _title,
-            // _description,
             cId,
             _targetAmount,
             0
-            // _image,
-            // _externalLink
         );
 
         campaigns[msg.sender].push(newCampaign);
