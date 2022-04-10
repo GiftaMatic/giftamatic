@@ -24,6 +24,7 @@ const ProgressBar = ({ bgcolor, progress, height }:{bgcolor:any, progress:any, h
     const progresstext = {
         color: '#fff',
         display: 'flex',
+        fontSize: '15px',
         alignItems: 'center',
         fontFamily: 'Gill Sans, Gill Sans MT, Calibri, Trebuchet MS, sans-serif',
     }

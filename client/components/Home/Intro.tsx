@@ -1,4 +1,5 @@
 import React from "react"
+import Router from 'next/router'
 
 import { Button } from 'antd'
 import { GiftOutlined, TeamOutlined, ArrowRightOutlined } from "@ant-design/icons"
@@ -22,7 +23,7 @@ const Intro = ({ address, connectWallet }: IntroProps) => {
       </div>
     </div>
     <div className='flex mt-6'>
-      <Button onClick={() => address !== '' ? null : connectWallet()} className='drop-shadow-xl' size='large' shape='round' type='primary'>{address !== '' ? 'Dashboard' : 'Connect Wallet'}</Button>
+      <Button onClick={() => address !== '' ? Router.push('/dashboard') : connectWallet()} className='drop-shadow-xl' size='large' shape='round' type='primary'>{address !== '' ? 'Dashboard' : 'Connect Wallet'}</Button>
       <Button onClick={() => {
         window.scrollTo({ top: window.screen.height * 0.9, behavior: 'smooth' })
       }} className='drop-shadow-xl ml-2 text-white' size='large' shape='round' type='default'>How it works?</Button>
