@@ -4,13 +4,11 @@ pragma solidity ^0.8.11;
 import "./GiftToken.sol";
 
 contract Gift {
+    
     struct Campaign {
-        string title;
-        string description;
+        string cId;
         uint256 targetAmount;
         uint256 collectedAmount;
-        string image;
-        string externalLink;
     }
 
     mapping(address => Campaign[]) private campaigns;
@@ -18,13 +16,10 @@ contract Gift {
     GiftToken private token;
 
     event CampaignCreated(
+        string cId,
         address indexed creator,
-        string title,
-        string description,
         uint256 targetAmount,
-        uint256 collectedAmount,
-        string image,
-        string externalLink
+        uint256 collectedAmount
     );
 
     constructor(GiftToken _token) {
@@ -32,32 +27,27 @@ contract Gift {
     }
 
     function createCampaign(
-        string calldata _title,
-        string calldata _description,
-        uint256 _targetAmount,
-        string calldata _image,
-        string calldata _externalLink
+        string calldata cId,
+        uint256 _targetAmount
     ) public {
         require(_targetAmount > 0, "Target amount should be greater than 0");
 
         Campaign memory newCampaign = Campaign(
-            _title,
-            _description,
+            // _title,
+            // _description,
+            cId,
             _targetAmount,
-            0,
-            _image,
-            _externalLink
+            0
+            // _image,
+            // _externalLink
         );
 
         campaigns[msg.sender].push(newCampaign);
         emit CampaignCreated(
+            cId,
             msg.sender,
-            _title,
-            _description,
             _targetAmount,
-            0,
-            _image,
-            _externalLink
+            0
         );
     }
 
