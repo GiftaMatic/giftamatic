@@ -48,6 +48,9 @@ const addMaticNetworkToMetamask = () => {
 }
 
 const fetchAccountAddress = async () => {
+  if(!window || !window.ethereum) {
+    return ''
+  }
   const web3 = new Web3(window.ethereum)
   const accounts = await web3.eth.getAccounts()
   if (accounts && accounts.length > 0) {

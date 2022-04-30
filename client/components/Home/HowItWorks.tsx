@@ -10,7 +10,7 @@ const HowItWorks = () => {
       </div>
       <ArrowRightOutlined className='rotate-90 md:rotate-0' style={{ fontSize: '30px' }} />
       <div className='flex flex-col items-center md:mx-2 md:my-0 my-2'>
-        <DollarOutlined style={{ fontSize: '30px' }} /><span className='text-lg'>Creates Donation Campaign</span>
+        <DollarOutlined style={{ fontSize: '30px' }} /><span className='text-lg'>Create Donation Campaign</span>
       </div>
       <ArrowRightOutlined className='rotate-90 md:rotate-0' style={{ fontSize: '30px' }} />
       <div className='flex flex-col items-center md:mx-2 md:my-0 my-2'>
@@ -18,7 +18,7 @@ const HowItWorks = () => {
       </div>
       <ArrowRightOutlined className='rotate-90 md:rotate-0' style={{ fontSize: '30px' }} />
       <div className='flex flex-col items-center md:mx-2 md:my-0 my-2'>
-        <TeamOutlined style={{ fontSize: '30px' }} /> <span className='text-lg'>People Donates</span>
+        <TeamOutlined style={{ fontSize: '30px' }} /> <span className='text-lg'>People Donate</span>
       </div>
       <ArrowRightOutlined className='rotate-90 md:rotate-0' style={{ fontSize: '30px' }} />
       <div className='flex flex-col items-center md:mx-2 md:my-0 my-2'>

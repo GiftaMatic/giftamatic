@@ -8,6 +8,7 @@ import HowItWorks from '../components/Home/HowItWorks'
 import Intro from '../components/Home/Intro'
 import { fetchAccountAddress, connectWallet } from '../logics/wallet'
 import FeaturedCampaigns from '../components/Home/FeaturedCampaigns'
+import Footer from '../components/Footer.tsx/Footer'
 
 const Home: NextPage = () => {
 
@@ -31,6 +32,7 @@ const Home: NextPage = () => {
     <HowItWorks />
     <About />
     <FeaturedCampaigns />
+    <Footer />
   </div>
 }
 

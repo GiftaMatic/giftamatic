@@ -56,7 +56,7 @@ const Header = ({ accountAddress }: HeaderProps) => {
     fetchAccountAddress().then(val => setAccount(val))
   }, [])
 
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && window.ethereum !== undefined) {
     window.ethereum.on('networkChanged', function (networkId: string) {
       if (networkId !== NETWORK_ID) {
         addMaticNetworkToMetamask()
@@ -73,7 +73,7 @@ const Header = ({ accountAddress }: HeaderProps) => {
   // const [connected, setConnected] = useState(false)
 
   return <div className="top-0 left-0 right-0 p-4 flex items-center bg-white shadow-md">
-    <Link href={'/'}><h1 className="flex-1 m-0 ml-3 text-2xl font-semibold drop-shadow-xl">GiftaMatic</h1></Link>
+    <Link href={'/'}><h1 className="flex-1 m-0 ml-3 text-2xl font-semibold drop-shadow-xl cursor-pointer">GiftaMatic</h1></Link>
     <GiftScore value={accountGFTBalance} />
     <MaticBalance value={accountBalance} />
     {

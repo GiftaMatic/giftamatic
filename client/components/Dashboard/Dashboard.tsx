@@ -34,7 +34,6 @@ const DashboardPage = () => {
 
     if (account !== undefined && account !== '')
       createCampaign(account, title, description, targetAmount, imageURL, associatedLink).then((r) => {
-        console.log('hi', r)
         toast(`Created campaign successfully!`)
         setTitle('')
         setDescription('')
@@ -69,8 +68,6 @@ const DashboardPage = () => {
       )
     }
   }, [account])
-
-  console.log(campaigns)
 
   return (
     <div className="dashboard-container h-screen ">

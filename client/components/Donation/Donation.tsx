@@ -41,7 +41,7 @@ const DonationPageContent = ({ address, campaignId }: DonationPageProps) => {
             toast('Thanks for donating.')
             window.location.reload()
           }).catch(e => {
-            console.log(e, 'dsfsf')
+            console.log(e)
             toast('Unable to send a donation.')
           })
         }} donorAccount={account} address={address} id={campaignId} showDonate={true} className='p-10 rounded-xl shadow-md' externalLink={campaign.externalLink} name={campaign.title} collectedAmount={campaign.collectedAmount} targetAmount={campaign.targetAmount} description={campaign.description}
