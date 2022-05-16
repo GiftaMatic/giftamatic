@@ -11,53 +11,59 @@ import { CampaignType } from '../types'
 import { LoadingOutlined } from '@ant-design/icons'
 import { toast } from 'react-toastify'
 
+type DonationProps = {
+  campaign: CampaignType
+}
+
 type DonationPageProps = {
+  campaign: CampaignType,
   address: string,
   campaignId: string
 }
 
-const DonationPageContent = ({ address, campaignId }: DonationPageProps) => {
-
-  const [campaign, setCampaign] = useState({} as CampaignType)
+const DonationPageContent = ({ campaign, address, campaignId }: DonationPageProps) => {
 
   const [account, setAccount] = useState('')
 
   useEffect(() => {
     fetchAccountAddress().then(val => setAccount(val))
   }, [])
-
-  useEffect(() => {
-    if ((address !== undefined && address !== '') && (campaignId !== undefined && campaignId !== '')) {
-      fetchCampaignById(address, campaignId).then(val => setCampaign(val))
-    }
-  }, [address, campaignId])
-
+  console.log(campaign.title)
   return (
     <div className="dashboard-container h-screen ">
       <Header accountAddress="" />
-      {campaign.title !== undefined ? <div className='flex flex-1 m-10 justify-center float-center items-center'>
-        <Details onDonate={(amount: number) => {
-          giftMatic(address, campaignId, account, amount).then((v) => {
-            toast('Thanks for donating.')
-            window.location.reload()
-          }).catch(e => {
-            console.log(e)
-            toast('Unable to send a donation.')
-          })
-        }} donorAccount={account} address={address} id={campaignId} showDonate={true} className='p-10 rounded-xl shadow-md' externalLink={campaign.externalLink} name={campaign.title} collectedAmount={campaign.collectedAmount} targetAmount={campaign.targetAmount} description={campaign.description}
+      {<div className='flex flex-1 m-10 justify-center float-center items-center'>
+        <Details
+          onDonate={(amount: number) => {
+            giftMatic(address, campaignId, account, amount).then((v) => {
+              toast('Thanks for donating.')
+              window.location.reload()
+            }).catch(e => {
+              console.log(e)
+              toast('Unable to send a donation.')
+            })
+          }}
+          donorAccount={account}
+          address={address}
+          id={campaignId}
+          showDonate={true}
+          className='p-10 rounded-xl shadow-md'
+          externalLink={campaign.externalLink}
+          name={campaign.title}
+          collectedAmount={campaign.collectedAmount}
+          targetAmount={campaign.targetAmount}
+          description={campaign.description}
           image={campaign.image} />
-      </div> : <div className='flex flex-1 justify-center items-center'>
-        <LoadingOutlined />
       </div>}
 
     </div>
   )
 }
 
-const Donation = () => {
+const Donation = ({ campaign }: DonationProps) => {
   const router = useRouter()
   const { address, id } = router.query
-  return <DonationPageContent address={address as string} campaignId={id as string} />
+  return <DonationPageContent campaign={campaign} address={address as string} campaignId={id as string} />
 }
 
 export default Donation

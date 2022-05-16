@@ -4,7 +4,7 @@ import Web3 from "web3"
 import { AbiItem } from 'web3-utils'
 import abi from '../abi/Gift.json'
 import giftAbi from '../abi/Gift.json'
-import { NETWORK_ID } from "../config";
+import { alchemyUrl, NETWORK_ID } from "../config";
 
 const fetchAllCampaigns = async (address: string) => {
   const web3 = new Web3(window.ethereum);
@@ -15,8 +15,21 @@ const fetchAllCampaigns = async (address: string) => {
   return []
 }
 
+const fetchCampaign = async (address: string, id: string) => {
+  const web3 = new Web3(alchemyUrl);
+  const contract = new web3.eth.Contract(<AbiItem>(giftAbi.abi as any), abi.networks[NETWORK_ID].address)
+  if (address !== '')
+    return await contract.methods.getCampaign(address, parseInt(id)).call()
+  return null
+}
+
 const fetchCampaignById = async (address: string, id: string) => {
-  const web3 = new Web3(window.ethereum);
+  let web3
+  if (window && window.ethereum !== undefined && window.ethereum.networkVersion === NETWORK_ID) {
+    web3 = new Web3(window.ethereum)
+  } else {
+    web3 = new Web3(alchemyUrl)
+  }
 
   const contract = new web3.eth.Contract(<AbiItem>(giftAbi.abi as any), abi.networks[NETWORK_ID].address)
   if (address !== '')
@@ -41,4 +54,4 @@ const giftMatic = async (address: string, id: string, donorAddress: string, dona
   return null
 }
 
-export { fetchAllCampaigns, fetchCampaignById, giftMatic, createCampaign }
+export { fetchAllCampaigns, fetchCampaign, fetchCampaignById, giftMatic, createCampaign }
