@@ -10,6 +10,7 @@ import Header from '../Header/Header'
 import { CampaignType } from '../types'
 import { LoadingOutlined } from '@ant-design/icons'
 import { toast } from 'react-toastify'
+import Footer from '../Footer/Footer'
 
 type DonationProps = {
   campaign: CampaignType
@@ -32,7 +33,7 @@ const DonationPageContent = ({ campaign, address, campaignId }: DonationPageProp
   return (
     <div className="dashboard-container h-screen ">
       <Header accountAddress="" />
-      {<div className='flex flex-1 m-10 justify-center float-center items-center'>
+      <div className='flex flex-1 m-10 justify-center float-center items-center'>
         <Details
           onDonate={(amount: number) => {
             giftMatic(address, campaignId, account, amount).then((v) => {
@@ -54,8 +55,8 @@ const DonationPageContent = ({ campaign, address, campaignId }: DonationPageProp
           targetAmount={campaign.targetAmount}
           description={campaign.description}
           image={campaign.image} />
-      </div>}
-
+      </div>
+      <Footer />
     </div>
   )
 }

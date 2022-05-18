@@ -7,7 +7,7 @@ const { Meta } = Card
 const FeaturedCampaigns = () => {
   return <div className='flex overflow-hidden lg:ml-10 rounded-tl-[120px] lg:rounded-bl-[120px] bg-gradient-to-b from-purple-500 to-pink-400 flex-col items-center lg:min-h-[70vh] lg:flex-row justify-center lg:justify-start'>
     <div className='flex ml-10 flex-col lg:mr-10 items-center lg:items-start mt-5 mb-5'>
-      <h2 className='text-6xl leading-relaxed text-white text-center lg:text-leftf'>
+      <h2 className='text-6xl leading-relaxed text-white text-center lg:text-left'>
         Featured <br /> Campaigns
       </h2>
       <p className='text-white text-xl max-w-xl lg:max-w-xs'>Hand-picked campaigns relevant to the current cause and needs. Donate today, support the cause and earn GFT rewards.</p>

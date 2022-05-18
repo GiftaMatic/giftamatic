@@ -8,6 +8,7 @@ import { fetchAccountAddress } from "../../logics/wallet"
 import { CampaignType } from "../types"
 import { title } from "process"
 import { toast } from "react-toastify"
+import Footer from "../Footer/Footer"
 
 const DashboardPage = () => {
 
@@ -109,6 +110,7 @@ const DashboardPage = () => {
 
         </div>
       </Modal>
+      <Footer />
     </div>
   )
 }

@@ -1,7 +1,6 @@
 import React from "react"
 import Link from "next/link"
 
-
 const About = () => {
   return <div className='my-20 text-center'>
     <div className='flex flex-col lg:flex-row'>
