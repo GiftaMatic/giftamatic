@@ -33,7 +33,7 @@ const DonationPageContent = ({ campaign, address, campaignId }: DonationPageProp
   return (
     <div className="dashboard-container h-screen ">
       <Header accountAddress="" />
-      <div className='flex flex-1 m-10 justify-center float-center items-center'>
+      <div className='flex flex-1 m-1 md:m-10 justify-center float-center items-center'>
         <Details
           onDonate={(amount: number) => {
             giftMatic(address, campaignId, account, amount).then((v) => {
