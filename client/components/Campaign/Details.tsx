@@ -1,11 +1,10 @@
 import React from 'react'
-import { Layout, Col, Row, Button, Input } from "antd"
-import { GiftOutlined, LinkOutlined, RightOutlined, ShareAltOutlined } from "@ant-design/icons"
+import { Layout, Col, Button, Input } from "antd"
+import { GiftOutlined, LinkOutlined, ShareAltOutlined } from "@ant-design/icons"
 import ProgressBar from "../Campaign/ProgressBar"
 import { toast } from 'react-toastify'
-import { BigNumber, ethers } from 'ethers'
+import { ethers } from 'ethers'
 import { useState } from 'react'
-import { giftMatic } from '../../logics/gift'
 
 const Details = ({ address, id, showDonate, name, description, collectedAmount, targetAmount, image, externalLink, className, donorAccount = '', onDonate }: { address: any, id: any, showDonate: any, name: any, description: any, collectedAmount: any, targetAmount: any, image: any, externalLink: any, className: any, donorAccount: any, onDonate: Function }) => {
   const collectedAmountNumber = ethers.utils.formatEther(collectedAmount)
@@ -40,16 +39,16 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
             </div> : <div></div>
           }
 
-          <Row>
-            <Col span={18}>
+          <div className='flex flex-col-reverse lg:flex-row'>
+            <Col className='lg:w-5/6'>
               <p className='text-lg flex float-left text-justify m-2'>
                 {description}
               </p>
             </Col>
-            <Col className='ml-1' span={5}>
+            <Col className='ml-1'>
               <img className='w-full rounded-xl shadow-xl' src={image} />
             </Col>
-          </Row>
+          </div>
         </Layout>
       </Layout>
     </>
