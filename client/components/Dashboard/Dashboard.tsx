@@ -6,17 +6,13 @@ import { useState, useEffect } from 'react'
 import { createCampaign, fetchAllCampaigns } from "../../logics/gift"
 import { fetchAccountAddress } from "../../logics/wallet"
 import { CampaignType } from "../types"
-import { title } from "process"
 import { toast } from "react-toastify"
-import Footer from "../Footer/Footer"
 
 const DashboardPage = () => {
-
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [account, setAccount] = useState('')
   const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([]))
-
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -89,7 +85,6 @@ const DashboardPage = () => {
           <Button key="submit" shape="round" size="middle" type="primary" onClick={handleOk}>
             Create
           </Button>,
-
         ]}>
         <div className="flex h-4/6 flex-col">
 
@@ -110,7 +105,6 @@ const DashboardPage = () => {
 
         </div>
       </Modal>
-      <Footer />
     </div>
   )
 }
