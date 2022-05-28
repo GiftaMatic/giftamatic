@@ -28,6 +28,7 @@ contract GiftToken is ERC20 {
 
     function transfer(address, uint256) public pure override returns (bool) {
         // Gift tokens are non-transferrable.
+        require(false, "Gift tokens are non-transferrable");
         return false;
     }
 }
