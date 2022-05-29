@@ -156,6 +156,7 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
         onOk={donateBtn}
         confirmLoading={loadingTxn}
         onCancel={cancelBtn}
+        okText={'Donate (in Matic)'}
       >
         <h3>Donate via</h3>
         <div className='flex flex-row w-[220px] justify-center items-center mb-4'>
