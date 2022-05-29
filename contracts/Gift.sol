@@ -48,6 +48,32 @@ contract Gift {
         token = _token;
     }
 
+    function getNftGifts() public view returns (NFTGift[] memory) {
+        return nftGifts;
+    }
+
+    function revokeNFtGift(uint256 _nftIndex) public {
+        require(_nftIndex < nftGifts.length, "Index out of bounds");
+        require(
+            msg.sender == nftGifts[_nftIndex].prevOwner,
+            "You are not the previous owner of this gift"
+        );
+        require(
+            nftGifts[_nftIndex].status == NFTGiftState.LISTED,
+            "NFT is already sold or withdrawn."
+        );
+
+        ERC721 nft = ERC721(nftGifts[_nftIndex].contractAddress);
+
+        nft.transferFrom(
+            address(this),
+            msg.sender,
+            nftGifts[_nftIndex].tokenId
+        );
+
+        nftGifts[_nftIndex].status = NFTGiftState.EXPIRED;
+    }
+
     function createCampaign(
         string calldata _title,
         string calldata _description,
@@ -122,19 +148,22 @@ contract Gift {
     }
 
     function claimBackNFT(uint256 _index) public payable {
-      require(_index < nftGifts.length, "NFT doesn't exists!");
+        require(_index < nftGifts.length, "NFT doesn't exists!");
 
-      NFTGift memory nft = nftGifts[_index];
+        NFTGift memory nft = nftGifts[_index];
 
-      require(nft.prevOwner == msg.sender, "You were not the owner of this nft");
-      require(nft.status != NFTGiftState.SOLD, "NFT is already donated");
+        require(
+            nft.prevOwner == msg.sender,
+            "You were not the owner of this nft"
+        );
+        require(nft.status != NFTGiftState.SOLD, "NFT is already donated");
 
-      ERC721 nftContract = ERC721(nft.contractAddress);
-      
-      nftContract.transferFrom(address(this), nft.prevOwner, nft.tokenId);
+        ERC721 nftContract = ERC721(nft.contractAddress);
 
-      nft.status = NFTGiftState.EXPIRED;
-      nftGifts[_index] = nft;
+        nftContract.transferFrom(address(this), nft.prevOwner, nft.tokenId);
+
+        nft.status = NFTGiftState.EXPIRED;
+        nftGifts[_index] = nft;
     }
 
     function buyNFT(uint256 _index) public payable {
@@ -173,7 +202,7 @@ contract Gift {
         token.mint(nftGifts[_index].prevOwner, msg.value);
 
         // Minting GFT tokens for the NFT buyer (1% of the buy amount).
-        token.mint(nftGifts[_index].prevOwner, msg.value / 100);
+        token.mint(msg.sender, msg.value / 100);
 
         // The NFT is sold.
         nftGifts[_index].status = NFTGiftState.SOLD;

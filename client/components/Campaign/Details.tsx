@@ -59,9 +59,17 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
     if (nft === null) {
       setLoadingNFTTxn(true)
       const nftData = await fetchNFT(contractAddress, tokenId)
-      const data = JSON.parse(nftData)
-      setLoadingNFTTxn(false)
-      setNft(data)
+      if (nftData.slice(0, 4) === "ipfs") {
+        fetch('https://ipfs.io/ipfs/' + nftData.slice(7)).then(res => res.json()).then(data => {
+          setLoadingNFTTxn(false)
+          setNft(data)
+        }).catch((e: any) => console.log(e))
+      } else {
+        const data = JSON.parse(nftData)
+        setLoadingNFTTxn(false)
+        setNft(data)
+      }
+
     } else {
       setLoadingNFTTxn(true)
       try {

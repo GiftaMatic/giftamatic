@@ -9,6 +9,22 @@ import { alchemyUrl, NETWORK_ID, smartContractAddress } from "../config"
 
 const contractAddress = smartContractAddress
 
+const buyNftFromContract = async (nftIndex: number, donorAddress: string, price: string) => {
+  const web3 = new Web3(window.ethereum);
+
+  const contract = new web3.eth.Contract(<AbiItem>(abi.abi as any), contractAddress)
+  if (donorAddress !== '')
+    return await contract.methods.buyNFT(nftIndex).send({ from: donorAddress, value: web3.utils.toWei(price.toString(), 'ether') })
+  return null
+}
+
+const getNFTs = async () => {
+  const web3 = new Web3(window.ethereum);
+
+  const contract = new web3.eth.Contract(<AbiItem>(abi.abi as any), contractAddress)
+  return await contract.methods.getNftGifts().call()
+}
+
 const giftNFT = async (nftContractAddress: string, tokenid: string, price: string, campaignCreator: string, campaignIndex: string, donorAddress: string) => {
   const web3 = new Web3(window.ethereum);
 
@@ -83,4 +99,4 @@ const giftMatic = async (address: string, id: string, donorAddress: string, dona
   return null
 }
 
-export { giftNFT, approveNFT, fetchNFT, fetchAllCampaigns, fetchCampaign, fetchCampaignById, giftMatic, createCampaign }
+export { buyNftFromContract, getNFTs, giftNFT, approveNFT, fetchNFT, fetchAllCampaigns, fetchCampaign, fetchCampaignById, giftMatic, createCampaign }
