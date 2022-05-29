@@ -1,9 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "./GiftToken.sol";
 
 contract Gift {
+    enum NFTGiftState {
+        LISTED,
+        EXPIRED,
+        SOLD
+    }
+
     struct Campaign {
         string title;
         string description;
@@ -12,7 +19,17 @@ contract Gift {
         string image;
         string externalLink;
     }
+    struct NFTGift {
+        NFTGiftState status;
+        address contractAddress;
+        uint256 tokenId;
+        address prevOwner;
+        uint256 price;
+        address campaignCreator;
+        uint256 campaignId;
+    }
 
+    NFTGift[] public nftGifts;
     mapping(address => Campaign[]) private campaigns;
 
     GiftToken private token;
@@ -29,6 +46,32 @@ contract Gift {
 
     constructor(GiftToken _token) {
         token = _token;
+    }
+
+    function getNftGifts() public view returns (NFTGift[] memory) {
+        return nftGifts;
+    }
+
+    function revokeNFtGift(uint256 _nftIndex) public {
+        require(_nftIndex < nftGifts.length, "Index out of bounds");
+        require(
+            msg.sender == nftGifts[_nftIndex].prevOwner,
+            "You are not the previous owner of this gift"
+        );
+        require(
+            nftGifts[_nftIndex].status == NFTGiftState.LISTED,
+            "NFT is already sold or withdrawn."
+        );
+
+        ERC721 nft = ERC721(nftGifts[_nftIndex].contractAddress);
+
+        nft.transferFrom(
+            address(this),
+            msg.sender,
+            nftGifts[_nftIndex].tokenId
+        );
+
+        nftGifts[_nftIndex].status = NFTGiftState.EXPIRED;
     }
 
     function createCampaign(
@@ -102,5 +145,123 @@ contract Gift {
 
         campaigns[_creator][index] = campaign;
         token.mint(msg.sender, msg.value);
+    }
+
+    function claimBackNFT(uint256 _index) public payable {
+        require(_index < nftGifts.length, "NFT doesn't exists!");
+
+        NFTGift memory nft = nftGifts[_index];
+
+        require(
+            nft.prevOwner == msg.sender,
+            "You were not the owner of this nft"
+        );
+        require(nft.status != NFTGiftState.SOLD, "NFT is already donated");
+
+        ERC721 nftContract = ERC721(nft.contractAddress);
+
+        nftContract.transferFrom(address(this), nft.prevOwner, nft.tokenId);
+
+        nft.status = NFTGiftState.EXPIRED;
+        nftGifts[_index] = nft;
+    }
+
+    function buyNFT(uint256 _index) public payable {
+        require(_index < nftGifts.length, "NFT doesn't exists!");
+        require(
+            nftGifts[_index].status == NFTGiftState.LISTED,
+            "NFT is not listed"
+        );
+        require(nftGifts[_index].price <= msg.value, "Gift is too expensive");
+
+        Campaign memory campaign = campaigns[nftGifts[_index].campaignCreator][
+            nftGifts[_index].campaignId
+        ];
+        require(
+            campaign.collectedAmount < campaign.targetAmount,
+            "Campaign is already reached it's target amount."
+        );
+
+        // Transferring the NFT.
+        ERC721 nft = ERC721(nftGifts[_index].contractAddress);
+        nft.transferFrom(address(this), msg.sender, nftGifts[_index].tokenId);
+
+        // Transferring the gift amount.
+        (bool success, ) = nftGifts[_index].campaignCreator.call{
+            value: msg.value
+        }("");
+        require(success, "Failed to transfer gift amount");
+
+        // Updating the collectedAmount in the campaign.
+        campaign.collectedAmount += msg.value;
+        campaigns[nftGifts[_index].campaignCreator][
+            nftGifts[_index].campaignId
+        ] = campaign;
+
+        // Minting GFT tokens for the NFT seller.
+        token.mint(nftGifts[_index].prevOwner, msg.value);
+
+        // Minting GFT tokens for the NFT buyer (1% of the buy amount).
+        token.mint(msg.sender, msg.value / 100);
+
+        // The NFT is sold.
+        nftGifts[_index].status = NFTGiftState.SOLD;
+    }
+
+    function donateNFT(
+        address _nftContractAddress,
+        uint256 _tokenId,
+        uint256 _price,
+        address _campaignCreator,
+        uint256 _campaignIndex
+    ) public payable {
+        // Check if the campaign exists and still open.
+        require(
+            campaigns[_campaignCreator].length != 0 ||
+                _campaignIndex < campaigns[_campaignCreator].length,
+            "Campaign does not exists."
+        );
+
+        Campaign memory campaign = campaigns[_campaignCreator][_campaignIndex];
+        require(
+            campaign.collectedAmount < campaign.targetAmount,
+            "Campaign is already reached it's target amount."
+        );
+
+        ERC721 nft = ERC721(_nftContractAddress);
+        require(
+            nft.ownerOf(_tokenId) == msg.sender,
+            "You are not the owner of this token"
+        );
+
+        require(
+            nft.getApproved(_tokenId) == address(this),
+            "Please approve the contract to access your NFT before donating"
+        );
+
+        // Transfer the NFT to self.
+        nft.transferFrom(msg.sender, address(this), _tokenId);
+
+        // Add to nft auctions array.
+        NFTGift memory nftGift = NFTGift(
+            NFTGiftState.LISTED,
+            _nftContractAddress,
+            _tokenId,
+            msg.sender,
+            _price,
+            _campaignCreator,
+            _campaignIndex
+        );
+
+        nftGifts.push(nftGift);
+    }
+
+    function getNFTMetadata(address _contract, uint256 _tokenId)
+        public
+        view
+        returns (string memory)
+    {
+        ERC721 nft = ERC721(_contract);
+        return nft.tokenURI(_tokenId);
     }
 }
