@@ -34,6 +34,10 @@ const NFTCard = ({ nftGift, index, account }: NFTCardProps) => {
           fetch('https://ipfs.io/ipfs/' + response.slice(7)).then(res => res.json()).then(data => {
             setNft(data)
           }).catch((e: any) => console.log(e))
+        } else if (response.slice(0, 4) === "http") {
+          fetch(response).then(res => res.json()).then(data => {
+            setNft(data)
+          }).catch((e: any) => console.log(e))
         } else {
           const data = JSON.parse(response)
           setNft(data)
@@ -56,7 +60,7 @@ const NFTCard = ({ nftGift, index, account }: NFTCardProps) => {
     }
   }
 
-  return <Card
+  return nftGift['status'] !== 0 ? <></> : <Card
     key={nftGift['contractAddress'] + nftGift['tokenId']}
     className='w-[300px] rounded-xl'
     cover={

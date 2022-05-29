@@ -64,7 +64,13 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
           setLoadingNFTTxn(false)
           setNft(data)
         }).catch((e: any) => console.log(e))
+      } else if (nftData.slice(0, 4) === "http") {
+        fetch(nftData).then(res => res.json()).then(data => {
+          setLoadingNFTTxn(false)
+          setNft(data)
+        }).catch((e: any) => console.log(e))
       } else {
+        console.log(nftData)
         const data = JSON.parse(nftData)
         setLoadingNFTTxn(false)
         setNft(data)
