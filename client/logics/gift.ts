@@ -82,11 +82,11 @@ const fetchCampaignById = async (address: string, id: string) => {
   return null
 }
 
-const createCampaign = async (account: string, title: string, description: string, targetAmount: string, imageURL: string, associatedURL: string) => {
+const createCampaign = async (account: string, targetAmount: string, cid: string) => {
   const web3 = new Web3(window.ethereum);
 
   const contract = new web3.eth.Contract(<AbiItem>(abi.abi as any), contractAddress)
-  return await contract.methods.createCampaign(title, description, web3.utils.toWei(targetAmount, 'ether'), imageURL, associatedURL).send({ from: account })
+  return await contract.methods.createCampaign(cid, web3.utils.toWei(targetAmount, 'ether')).send({ from: account })
 }
 
 const giftMatic = async (address: string, id: string, donorAddress: string, donationAmount: number) => {
