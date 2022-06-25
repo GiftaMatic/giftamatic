@@ -3,9 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@openzeppelin/contracts": "^4.5.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
+    "@truffle/hdwallet-provider": "^2.0.5",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.11.3",
     "@types/react": "^17.0.31",
@@ -16,9 +19,10 @@
     "antd": "^4.16.13",
     "axios": "^0.23.0",
     "cypress": "^8.6.0",
-    "ethers": "^5.5.2",
+    "ethers": "^5.6.2",
     "json-server": "^0.17.0",
     "moralis": "^0.0.176",
+    "npm": "^8.6.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.4",
@@ -27,6 +31,7 @@
     "react-scripts": "^4.0.3",
     "react-toastify": "^8.1.0",
     "reactstrap": "^9.0.1",
+    "truffle-assertions": "^0.9.2",
     "web3": "^1.6.1"
   },
   "scripts": {
@@ -60,6 +65,7 @@
   "devDependencies": {
     "cypress-cucumber-preprocessor": "^4.3.0",
     "gh-pages": "^3.2.3",
+    "hardhat": "^2.9.3",
     "react-error-overlay": "6.0.9"
   }
 }

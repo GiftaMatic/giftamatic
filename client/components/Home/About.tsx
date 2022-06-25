@@ -1,7 +1,6 @@
 import React from "react"
 import Link from "next/link"
 
-
 const About = () => {
   return <div className='my-20 text-center'>
     <div className='flex flex-col lg:flex-row'>
@@ -11,7 +10,7 @@ const About = () => {
         <h1 className='text-xl'>Tushar Ojha <br /> <span className='text-lg'>Founder, <Link href="https://educate.tusharojha.com">Educate App</Link></span></h1>
       </div>
       <div className='flex flex-1 flex-col items-center'>
-        <iframe className='w-full lg:w-5/6 xl:h-[400px] lg:h-[300px] h-[400px]' src="https://www.youtube.com/embed/DkmQPTz1ckI" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+        <iframe className='w-full lg:w-5/6 xl:h-[400px] lg:h-[300px] h-[400px]' src="https://www.youtube.com/embed/6hP7nQAgKeg" title="GiftaMatic live demo" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
       </div>
     </div>
   </div>
