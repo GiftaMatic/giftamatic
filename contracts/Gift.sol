@@ -12,12 +12,9 @@ contract Gift {
     }
 
     struct Campaign {
-        string title;
-        string description;
+        string CID;
         uint256 targetAmount;
         uint256 collectedAmount;
-        string image;
-        string externalLink;
     }
     struct NFTGift {
         NFTGiftState status;
@@ -35,13 +32,10 @@ contract Gift {
     GiftToken private token;
 
     event CampaignCreated(
+        string CID,
         address indexed creator,
-        string title,
-        string description,
         uint256 targetAmount,
-        uint256 collectedAmount,
-        string image,
-        string externalLink
+        uint256 collectedAmount
     );
 
     constructor(GiftToken _token) {
@@ -75,32 +69,23 @@ contract Gift {
     }
 
     function createCampaign(
-        string calldata _title,
-        string calldata _description,
-        uint256 _targetAmount,
-        string calldata _image,
-        string calldata _externalLink
+        string calldata CID,
+        uint256 _targetAmount
     ) public {
         require(_targetAmount > 0, "Target amount should be greater than 0");
 
         Campaign memory newCampaign = Campaign(
-            _title,
-            _description,
+            CID,
             _targetAmount,
-            0,
-            _image,
-            _externalLink
+            0
         );
 
         campaigns[msg.sender].push(newCampaign);
         emit CampaignCreated(
+            CID,
             msg.sender,
-            _title,
-            _description,
             _targetAmount,
-            0,
-            _image,
-            _externalLink
+            0
         );
     }
 
