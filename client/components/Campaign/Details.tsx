@@ -7,6 +7,8 @@ import { ethers } from 'ethers'
 import { useState } from 'react'
 import { approveNFT, fetchNFT, giftNFT } from '../../logics/gift'
 import NFTView from './NftView'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const Details = ({ address, id, showDonate, name, description, collectedAmount, targetAmount, image, externalLink, className, donorAccount = '', onDonate }: { address: any, id: any, showDonate: any, name: any, description: any, collectedAmount: any, targetAmount: any, image: any, externalLink: any, className: any, donorAccount: any, onDonate: Function }) => {
   const collectedAmountNumber = ethers.utils.formatEther(collectedAmount)
@@ -125,7 +127,7 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
           <div className='flex flex-col-reverse lg:flex-row'>
             <Col className='lg:w-5/6'>
               <p className='text-lg flex float-left text-justify m-2'>
-                {description}
+                <ReactMarkdown children={description} remarkPlugins={[remarkGfm]} />
               </p>
             </Col>
             <Col className='ml-1'>
