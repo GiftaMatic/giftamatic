@@ -2,13 +2,17 @@ import { LoadingOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/i
 import { Button, Modal, Upload } from "antd"
 import Header from "../Header/Header"
 import Campaign from "../Campaign/Campaign"
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef} from 'react'
 import { createCampaign, fetchAllCampaigns } from "../../logics/gift"
 import { fetchAccountAddress } from "../../logics/wallet"
 import { CampaignType } from "../types"
 import { toast } from "react-toastify"
 import { Web3Storage } from 'web3.storage'
 import { ipfsToken } from "../../config"
+import ReactMarkdown from "react-markdown"
+import Editor from "react-markdown-editor-lite"
+import remarkGfm from 'remark-gfm'
+import "react-markdown-editor-lite/lib/index.css"
 
 const getBase64 = (img: any, callback: any) => {
   const reader = new FileReader();
@@ -20,7 +24,6 @@ const DashboardPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [account, setAccount] = useState('')
   const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([]))
-
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
@@ -28,7 +31,7 @@ const DashboardPage = () => {
   const [imageUrl, setImageUrl] = useState('')
   const [associatedLink, setAssociatedLink] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
-
+  const mdEditor = useRef(null);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -138,6 +141,11 @@ const DashboardPage = () => {
     </div>
   );
 
+  const handleEditorChange = ({ html, text } : {html: any, text: any}) => {
+    const newValue = text.replace(/\d/g, "");
+    setDescription(newValue);
+  };
+
   return (
     <div className="dashboard-container h-screen ">
       <Header accountAddress="" />
@@ -161,11 +169,16 @@ const DashboardPage = () => {
         <div className="flex h-4/6 flex-col">
 
           <label className="font-bold" htmlFor="title">Title </label>
-          <input value={title} className="px-2 mb-3 border-2 border-red-300 rounded-lg bg-red-100" onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
+          <input value={title} className="px-2 mb-3 border-2 border-red-300 rounded-lg" onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
 
           <label className="font-bold" htmlFor="description">Description </label>
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} className="px-2 border-2 border-red-300 mb-3 rounded-lg bg-red-100" placeholder="Description" />
-
+          <Editor
+            ref={mdEditor}
+            value={description}
+            className="border-2 border-red-300 mb-3 rounded-lg"
+            onChange={handleEditorChange}
+            renderHTML={text => <ReactMarkdown children={text} remarkPlugins={[remarkGfm]} />}
+          />
           <label className="font-bold" htmlFor="image">Image </label>
           <Upload
             listType="picture-card"
@@ -185,10 +198,10 @@ const DashboardPage = () => {
             ) : <UploadButton loading={loading} />}
           </Upload>
           <label className="font-bold mt-3" htmlFor="associatedLink">Associated Link </label>
-          <input value={associatedLink} onChange={(e) => setAssociatedLink(e.target.value)} className="px-2 mb-3 border-2 border-red-300 rounded-lg bg-red-100" placeholder="Associated Link" />
+          <input value={associatedLink} onChange={(e) => setAssociatedLink(e.target.value)} className="px-2 mb-3 border-2 border-red-300 rounded-lg" placeholder="Associated Link" />
 
           <label className="font-bold" htmlFor="targetAmount">Target Amount (in MATIC)</label>
-          <input type="text" placeholder="0" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)} className="px-2 border-2 border-red-300 rounded-lg bg-red-100" />
+          <input type="text" placeholder="0" value={targetAmount} onChange={(e) => setTargetAmount(e.target.value)} className="px-2 border-2 border-red-300 rounded-lg" />
 
         </div>
       </Modal>
