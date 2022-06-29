@@ -24,7 +24,6 @@ const DashboardPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [account, setAccount] = useState('')
   const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([]))
-
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
@@ -33,7 +32,6 @@ const DashboardPage = () => {
   const [associatedLink, setAssociatedLink] = useState("");
   const [targetAmount, setTargetAmount] = useState("");
   const mdEditor = useRef(null);
-
 
   const showModal = () => {
     setIsModalVisible(true);
