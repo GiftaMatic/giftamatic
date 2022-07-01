@@ -19,10 +19,10 @@ async function main() {
 
   const giftamaticContract = await ethers.getContractFactory("Gift");
   const giftamatic = await giftamaticContract.deploy(giftToken.address);
-  
+
   await giftToken.transferOwner(giftamatic.address);
 
-  console.log("GiftaMatic is now deployed to:", giftToken.address);
+  console.log("GiftaMatic is now deployed to:", giftamatic.address, "GFT token is now deployed to:", giftToken.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

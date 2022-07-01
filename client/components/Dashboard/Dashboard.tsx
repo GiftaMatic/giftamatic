@@ -2,7 +2,7 @@ import { LoadingOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/i
 import { Button, Modal, Upload } from "antd"
 import Header from "../Header/Header"
 import Campaign from "../Campaign/Campaign"
-import { useState, useEffect, useCallback, useRef} from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { createCampaign, fetchAllCampaigns } from "../../logics/gift"
 import { fetchAccountAddress } from "../../logics/wallet"
 import { CampaignType } from "../types"
@@ -64,7 +64,7 @@ const DashboardPage = () => {
       const dataFile = new File([dataBlob], 'details.json')
 
       const campaignCid = await storage.put([dataFile])
-      createCampaign(account, title, campaignCid).then((r) => {
+      createCampaign(account, targetAmount, campaignCid).then((r) => {
         toast(`Created campaign successfully!`)
         setTitle('')
         setDescription('')
@@ -141,9 +141,8 @@ const DashboardPage = () => {
     </div>
   );
 
-  const handleEditorChange = ({ html, text } : {html: any, text: any}) => {
-    const newValue = text.replace(/\d/g, "");
-    setDescription(newValue);
+  const handleEditorChange = ({ html, text }: { html: any, text: any }) => {
+    setDescription(text);
   };
 
   return (
@@ -181,9 +180,11 @@ const DashboardPage = () => {
           />
           <label className="font-bold" htmlFor="image">Image </label>
           <Upload
+            action={'/api/noop'}
             listType="picture-card"
             accept='.gif, .png, .jpeg, .jpg'
             onChange={handleChange}
+            multiple={false}
             showUploadList={false}
             beforeUpload={beforeUpload}
           >
