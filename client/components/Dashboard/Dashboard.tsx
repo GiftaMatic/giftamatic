@@ -64,7 +64,7 @@ const DashboardPage = () => {
       const dataFile = new File([dataBlob], 'details.json')
 
       const campaignCid = await storage.put([dataFile])
-      createCampaign(account, title, campaignCid).then((r) => {
+      createCampaign(account, targetAmount, campaignCid).then((r) => {
         toast(`Created campaign successfully!`)
         setTitle('')
         setDescription('')
