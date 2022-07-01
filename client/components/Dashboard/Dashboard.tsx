@@ -180,6 +180,7 @@ const DashboardPage = () => {
           />
           <label className="font-bold" htmlFor="image">Image </label>
           <Upload
+            action={'/api/noop'}
             listType="picture-card"
             accept='.gif, .png, .jpeg, .jpg'
             onChange={handleChange}
