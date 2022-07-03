@@ -12,5 +12,5 @@ module.exports = async function (deployer) {
   const gift = await Gift.deployed()
 
   await giftToken.transferOwner(gift.address)
-  console.log("GiftaMatic is now deployed to:", gift.address)
+  console.log("GiftaMatic is now deployed to:", gift.address, "GFT token is now deployed to:", giftToken.address)
 };
