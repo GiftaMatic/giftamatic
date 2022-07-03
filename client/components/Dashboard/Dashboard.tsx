@@ -9,6 +9,7 @@ import { CampaignType } from "../types"
 import { toast } from "react-toastify"
 import { Web3Storage } from 'web3.storage'
 import { ipfsToken } from "../../config"
+import { render } from "react-dom"
 
 const getBase64 = (img: any, callback: any) => {
   const reader = new FileReader();
@@ -19,7 +20,7 @@ const getBase64 = (img: any, callback: any) => {
 const DashboardPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [account, setAccount] = useState('')
-  const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([]))
+  const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([{targetAmount: "20", collectedAmount: "2", CID: ""}]))
 
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
@@ -76,9 +77,44 @@ const DashboardPage = () => {
     }
   };
 
+  const retrieveFiles = async (cid: any) => {
+    const storage = new Web3Storage({ token: ipfsToken } as any)
+    const res = await storage.get(cid)
+
+    if (res == null) {
+      toast(`Campaign with CID ${cid} not found`)
+      return;
+    }
+    console.log(`Response [${res.status}]  ${res.statusText}`);
+    if (!res.ok) {
+      throw new Error(`failed to get ${cid} - [${res.status}] ${res.statusText}`)
+    }
+
+    const files = await res.files()
+    return await files[0].text();
+  }
+
+  const retrieveImageData = async (data: any) => {
+    let dataObj = JSON.parse(data);
+    let imageURL = await retrieveFiles(dataObj.image);
+    dataObj.externalLink = imageURL;
+
+    return JSON.stringify(dataObj);
+  }
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+  const getFile = async (CID: string) => { 
+    let file = await retrieveFiles(CID); // bafybeigdmca5e67itp5bfykctq2rww3rymjzbglu7rm7w6q7dfijcusmwa 
+    const finalFile = await retrieveImageData(file); 
+    return JSON.parse(finalFile);
+  }
+  const fetchData = async (CID: string, collectedAmount: string, targetAmount: string) => {
+    const data = await getFile(CID);
+    const { title, description, image, externalLink } = data;
+    return { title, description, collectedAmount, targetAmount, image, externalLink, CID } as CampaignType
+  }
 
   useEffect(() => {
     fetchAccountAddress().then(val => setAccount(val))
@@ -88,11 +124,11 @@ const DashboardPage = () => {
     if (account) {
       fetchAllCampaigns(account).then(campaigns => {
         let data = Array.from<CampaignType>([])
-        campaigns.forEach((camp: any) => {
-          const { title, description, image, collectedAmount, targetAmount, externalLink } = camp
-          data.push({ title, description, collectedAmount, targetAmount, image, externalLink } as CampaignType)
+        campaigns.forEach(async (camp: any) => {
+          const { collectedAmount, targetAmount, CID } = camp
+          data.push(await fetchData(CID, collectedAmount, targetAmount))
         })
-        setCampaigns(data)
+        setCampaigns(data);
       }
       )
     }
