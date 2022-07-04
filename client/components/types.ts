@@ -3,7 +3,7 @@ export type CampaignType = {
   description?: string,
   targetAmount: string,
   image?: string,
-  externalLink?: string,
+  associatedLink?: string,
   collectedAmount: string,
   CID: string 
 }
