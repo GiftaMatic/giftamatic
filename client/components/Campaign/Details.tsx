@@ -7,13 +7,15 @@ import { ethers } from 'ethers'
 import { useState } from 'react'
 import { approveNFT, fetchNFT, giftNFT } from '../../logics/gift'
 import NFTView from './NftView'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const Details = ({ address, id, showDonate, name, description, collectedAmount, targetAmount, image, externalLink, className, donorAccount = '', onDonate }: { address: any, id: any, showDonate: any, name: any, description: any, collectedAmount: any, targetAmount: any, image: any, externalLink: any, className: any, donorAccount: any, onDonate: Function }) => {
   const collectedAmountNumber = ethers.utils.formatEther(collectedAmount)
   const collectedValue = collectedAmountNumber.split('.')[0] + '.' + collectedAmountNumber.split('.')[1].slice(0, 2)
   const targetAmountNumber = ethers.utils.formatEther(targetAmount)
   const targetAmountValue = targetAmountNumber.split('.')[0] + '.' + targetAmountNumber.split('.')[1].slice(0, 2)
-  const progress = parseFloat(collectedAmountNumber) / parseFloat(targetAmountNumber) * 100
+  const progress = (parseFloat(collectedAmountNumber) / parseFloat(targetAmountNumber) * 100).toFixed(2)
   const [donateAmount, setDonateAmount] = useState('')
   const [minimumPrice, setMinimumPrice] = useState('0.1')
   const [contractAddress, setContractAddress] = useState('')
@@ -99,7 +101,7 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
     setLoadingNFTTxn(false)
     setMinimumPrice('0.1')
   }
-
+  console.log()
   return (
     <>
       <Layout className={`flex flex-col ${className}`}>
@@ -115,17 +117,18 @@ const Details = ({ address, id, showDonate, name, description, collectedAmount, 
               navigator.clipboard.writeText(window.location.host + '/' + address + '/' + (id));
               toast('Link copied to clipboard');
             }} shape='round' style={{ display: 'flex' }} className='m-2 w-[100px] flex flex-1 items-center justify-center rounded-xl'>Share <ShareAltOutlined /></Button>
+
+            {
+              showDonate ? <>
+                <Button onClick={() => donate()} type='primary' shape='round' style={{ display: 'flex' }} className='m-2 w-[100px] flex flex-1 items-center justify-center rounded-xl'>Donate <GiftOutlined /></Button>
+              </> : <div></div>
+            }
           </div>
-          {
-            showDonate ? <>
-              <Button onClick={() => donate()} type='primary' shape='round' style={{ display: 'flex' }} className='m-2 w-[100px] flex flex-1 items-center justify-center rounded-xl'>Donate <GiftOutlined /></Button>
-            </> : <div></div>
-          }
 
           <div className='flex flex-col-reverse lg:flex-row'>
             <Col className='lg:w-5/6'>
-              <p className='text-lg flex float-left text-justify m-2'>
-                {description}
+              <p className='text-lg flex float-left text-justify m-2 flex-col'>
+                <ReactMarkdown children={description} remarkPlugins={[remarkGfm]} />
               </p>
             </Col>
             <Col className='ml-1'>

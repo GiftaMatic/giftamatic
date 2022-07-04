@@ -18,9 +18,12 @@
  *
  */
 
+const config = require('./config')
+const PRIVATE_KEY = config.PRIVATE_KEY
+
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 
-const privateKeys = ["399a8174ff6efb89b3fd90ebe0e7a760a6acda6f9ffa8dd5b23d685adcac45b2"];
+const privateKeys = [PRIVATE_KEY];
 
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
@@ -51,7 +54,9 @@ module.exports = {
     maticTestNet: {
       provider: () => new HDWalletProvider(privateKeys, 'https://rpc-mumbai.maticvigil.com'),
       network_id: 80001,
-      skipDryRun: true,
+      confirmations: 10,
+      timeoutBlocks: 200,
+      skipDryRun: true
     },
     // Another network with more advanced options...
     // advanced: {
