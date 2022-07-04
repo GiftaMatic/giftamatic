@@ -99,7 +99,7 @@ const DashboardPage = () => {
   const retrieveImageData = async (data: any) => {
     let dataObj = JSON.parse(data);
     let imageURL = await retrieveFiles(dataObj.image);
-    dataObj.externalLink = imageURL;
+    dataObj.image = imageURL;
 
     return JSON.stringify(dataObj);
   }
@@ -107,15 +107,15 @@ const DashboardPage = () => {
   const handleCancel = () => {
     setIsModalVisible(false);
   };
-  const getFile = async (CID: string) => { 
+  const getFile = async (CID: string) => {
     let file = await retrieveFiles(CID); // bafybeigdmca5e67itp5bfykctq2rww3rymjzbglu7rm7w6q7dfijcusmwa 
-    const finalFile = await retrieveImageData(file); 
+    const finalFile = await retrieveImageData(file);
     return JSON.parse(finalFile);
   }
   const fetchData = async (CID: string, collectedAmount: string, targetAmount: string) => {
     const data = await getFile(CID);
-    const { title, description, image, externalLink } = data;
-    return { title, description, collectedAmount, targetAmount, image, externalLink, CID } as CampaignType
+    const { title, description, image, associatedLink } = data;
+    return { title, description, collectedAmount, targetAmount, image, associatedLink, CID } as CampaignType
   }
 
   useEffect(() => {
@@ -124,13 +124,16 @@ const DashboardPage = () => {
 
   useEffect(() => {
     if (account) {
-      fetchAllCampaigns(account).then(campaigns => {
+      fetchAllCampaigns(account).then(async campaigns => {
         let data = Array.from<CampaignType>([])
-        campaigns.forEach(async (camp: any) => {
+        campaigns.forEach(async (camp: any, index: number) => {
           const { collectedAmount, targetAmount, CID } = camp
-          data.push(await fetchData(CID, collectedAmount, targetAmount))
+          const resp = await fetchData(CID, collectedAmount, targetAmount)
+          data.push(resp)
+          if (index === campaigns.length - 1) {
+            setCampaigns(data);
+          }
         })
-        setCampaigns(data);
       }
       )
     }

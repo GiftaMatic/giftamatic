@@ -39,7 +39,7 @@ const retrieveFiles = async (cid: any) => {
 const retrieveImageData = async (data: any) => {
   let dataObj = JSON.parse(data);
   let imageURL = await retrieveFiles(dataObj.image);
-  dataObj.externalLink = imageURL;
+  dataObj.image = imageURL;
 
   return JSON.stringify(dataObj);
 }
@@ -51,8 +51,8 @@ const getFile = async (CID: string) => {
 }
 const fetchData = async (CID: string, collectedAmount: string, targetAmount: string) => {
   const data = await getFile(CID);
-  const { title, description, image, externalLink } = data;
-  return { title, description, collectedAmount, targetAmount, image, externalLink, CID } as CampaignType
+  const { title, description, image, associatedLink } = data;
+  return { title, description, collectedAmount, targetAmount, image, associatedLink, CID } as CampaignType
 }
 
 export const getServerSideProps = async (context: any) => {

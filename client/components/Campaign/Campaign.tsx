@@ -8,16 +8,7 @@ import Details from "../Campaign/Details"
 const Campaign = ({ arr, address }: { arr: any, address: string }) => {
 
   const [selectedIndex, setSelectedIndex] = useState(0)
-  const { Sider, Header, Footer, Content } = Layout;
-
-  // const [selected, setSelected] = useState({
-  //   "name": undefined,
-  //   "desc": undefined,
-  //   "date": undefined,
-  //   "collectedAmount": undefined,
-  //   "targetAmount": undefined,
-  // })
-
+  const { Sider, Content } = Layout;
   return (
     <div className="h-full" >
 
@@ -36,14 +27,26 @@ const Campaign = ({ arr, address }: { arr: any, address: string }) => {
             })
           }
         </Sider>
-        <Layout className="rounded-lg h-full" >
+        <Layout className="rounded-lg h-full overflow-scroll" >
           <Content className="h-full bg-transparent m-5 text-6xl text-center rounded-lg">
             {
               (arr.length === 0) ? <div className="flex justify-center content-center">
                 <p> You dont have any campaigns! </p>
               </div> :
-                <Details onDonate={(d: any) => { }} donorAccount={''} address={address} id={selectedIndex} className={''} showDonate={false} externalLink={arr[selectedIndex].externalLink} name={arr[selectedIndex].title} collectedAmount={arr[selectedIndex].collectedAmount} targetAmount={arr[selectedIndex].targetAmount} description={arr[selectedIndex].description}
-                  image={arr[selectedIndex].image} />
+                <Details
+                  onDonate={(d: any) => { }}
+                  donorAccount={''}
+                  address={address}
+                  id={selectedIndex}
+                  className={''}
+                  showDonate={false}
+                  externalLink={arr[selectedIndex].associatedLink}
+                  name={arr[selectedIndex].title}
+                  collectedAmount={arr[selectedIndex].collectedAmount}
+                  targetAmount={arr[selectedIndex].targetAmount}
+                  description={arr[selectedIndex].description}
+                  image={arr[selectedIndex].image}
+                />
             }
           </Content>
         </Layout>
