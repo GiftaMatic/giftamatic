@@ -31,7 +31,7 @@ const Campaign = ({ arr, address }: { arr: any, address: string }) => {
           <Content className="h-full bg-transparent m-5 text-6xl text-center rounded-lg">
             {
               (arr.length === 0) ? <div className="flex justify-center content-center">
-                <p> You dont have any campaigns! </p>
+                <p> You don't have any campaigns! </p>
               </div> :
                 <Details
                   onDonate={(d: any) => { }}
