@@ -46,6 +46,7 @@ const DashboardPage = () => {
         toast("Please upload a related image.")
         return
       }
+      toast("Creating campaign: Image upload in progress...");
       const storage = new Web3Storage({ token: ipfsToken } as any)
       const imageBlob = new Blob([imageUrl])
       const img = new File([imageBlob], 'image.txt')
@@ -65,6 +66,7 @@ const DashboardPage = () => {
       const dataFile = new File([dataBlob], 'details.json')
 
       const campaignCid = await storage.put([dataFile])
+      toast("Creating campaign: sending a transaction...");
       createCampaign(account, targetAmount, campaignCid).then((r) => {
         toast(`Created campaign successfully!`)
         setTitle('')
