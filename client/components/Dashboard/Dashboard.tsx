@@ -1,5 +1,5 @@
 import { LoadingOutlined, PlusCircleOutlined, PlusOutlined } from "@ant-design/icons"
-import { Button, Modal, Upload } from "antd"
+import { Button, Modal, Spin, Upload } from "antd"
 import Header from "../Header/Header"
 import Campaign from "../Campaign/Campaign"
 import { useState, useEffect, useCallback, useRef } from 'react'
@@ -22,8 +22,9 @@ const getBase64 = (img: any, callback: any) => {
 
 const DashboardPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [account, setAccount] = useState('')
-  const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([]))
+  const [account, setAccount] = useState('');
+  const [loadingCampaigns, setCampaignLoading] = useState(false);
+  const [campaigns, setCampaigns] = useState(Array.from<CampaignType>([]));
   const [title, setTitle] = useState("");
   const [loading, setLoading] = useState(false);
   const [description, setDescription] = useState("");
@@ -45,6 +46,7 @@ const DashboardPage = () => {
         toast("Please upload a related image.")
         return
       }
+      toast("Creating campaign: Image upload in progress...");
       const storage = new Web3Storage({ token: ipfsToken } as any)
       const imageBlob = new Blob([imageUrl])
       const img = new File([imageBlob], 'image.txt')
@@ -64,6 +66,7 @@ const DashboardPage = () => {
       const dataFile = new File([dataBlob], 'details.json')
 
       const campaignCid = await storage.put([dataFile])
+      toast("Creating campaign: sending a transaction...");
       createCampaign(account, targetAmount, campaignCid).then((r) => {
         toast(`Created campaign successfully!`)
         setTitle('')
@@ -123,6 +126,7 @@ const DashboardPage = () => {
   }, [])
 
   useEffect(() => {
+    setCampaignLoading(true);
     if (account) {
       fetchAllCampaigns(account).then(async campaigns => {
         let data = Array.from<CampaignType>([])
@@ -135,7 +139,9 @@ const DashboardPage = () => {
           }
         })
       }
-      )
+      ).then(() => {
+        setCampaignLoading(false);
+      })
     }
   }, [account])
 
@@ -191,7 +197,7 @@ const DashboardPage = () => {
         <h1 className="dashboard-heading flex flex-row m-4 text-3xl font-semibold drop-shadow-xl" >Your Campaigns
           <Button onClick={() => showModal()} className="flex justify-center items-center ml-4" type="primary" shape="round" size="middle" style={{ height: "36px", width: "180px", display: 'flex', flexDirection: 'row' }} > Create Campaign <PlusCircleOutlined /> </Button>
         </h1>
-        <Campaign address={account} arr={campaigns} />
+        {loadingCampaigns ? <div className="flex h-full items-center justify-center"><Spin size="large" /></div> : <Campaign address={account} arr={campaigns} />}
       </div>
 
       <Modal title="Create Campaign" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}
