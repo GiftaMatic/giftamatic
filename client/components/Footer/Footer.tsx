@@ -12,7 +12,7 @@ const Footer = () => {
   return <>
     <div className="flex w-full mt-2 p-4 bg-white justify-center">
       <div className="flex w-full md:w-3/5 flex-row justify-center items-center">
-        <div className="mr-4"><Link href={'/'}><h1 className="m-0 text-2xl font-semibold drop-shadow-xl cursor-pointer">GiftaMatic</h1></Link></div>
+        <Link href={'/'}><img src="/assets/giftamatic.png" alt="logo" className="h-10 cursor-pointer"/></Link>
         <LinkItem link="mailto:contact@giftamatic.org" title="Contact Us" />
         <LinkItem link="https://github.com/giftamatic" title="GitHub" />
         <LinkItem link="https://twitter.com/giftamatic" title="Twitter" />
